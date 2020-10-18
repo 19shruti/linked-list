@@ -151,3 +151,269 @@ step 3: exit
 
 */
             
+ #include<stdio.h>
+#include<stdlib.h>
+struct node
+{
+    struct node *prev;
+    struct node *next;
+    int data;
+};
+struct node *head;
+void insert_beg();
+void insert_last();
+void insert_at_pos();
+void deletion_beg();
+void deletion_last();
+void delete_at_pos();
+void display();
+
+int main ()
+{
+int choice =0;
+    while(choice != 8)
+    {
+        printf("\n ____________________________________________________");
+        printf("\n1.Insert in beginning \n2.Insert at last\n3.Insert at specific position \n4.Delete from Beginning\n5.Delete from last\n6.Delete the node after the given data\n7.Display\n8.Exit\n");
+        printf("\nEnter your choice : ");
+        printf("\n ____________________________________________________");
+        scanf("\n%d",&choice);
+        switch(choice)
+        {
+            case 1:
+            insert_beg();
+            break;
+            case 2:
+            insert_last();
+            break;
+            case 3:
+            insert_at_pos();
+            break;
+            case 4:
+            deletion_beg();
+            break;
+            case 5:
+            deletion_last();
+            break;
+            case 6:
+            delete_at_pos();
+            break;
+            case 7:
+            display();
+            break;
+            case 8:
+            exit(0);
+            break;
+            default:
+            printf("Please enter valid choice.");
+            return 0;
+        }
+    }
+}
+void insert_beg()
+{
+   struct node *ptr,*temp;
+   int item;
+   ptr = (struct node *)malloc(sizeof(struct node));
+   if(ptr == NULL)
+   {
+       printf("\nOVERFLOW");
+   }
+   else
+   {
+    printf("\nEnter data: ");
+    scanf("%d",&item);
+    ptr->data=item;
+   if(head==NULL)
+   {
+      head = ptr;
+      ptr -> next = head;
+      ptr -> prev = head;
+   }
+   else
+   {
+       temp = head;
+    while(temp -> next != head)
+    {
+        temp = temp -> next;
+    }
+    temp -> next = ptr;
+    ptr -> prev = temp;
+    head -> prev = ptr;
+    ptr -> next = head;
+    head = ptr;
+   }
+   printf("\nNode inserted\n");
+}
+
+}
+void insert_last()
+{
+   struct node *ptr,*temp;
+   int item;
+   ptr = (struct node *) malloc(sizeof(struct node));
+   if(ptr == NULL)
+   {
+       printf("\nOVERFLOW");
+   }
+   else
+   {
+       printf("\nEnter data : ");
+       scanf("%d",&item);
+        ptr->data=item;
+       if(head == NULL)
+       {
+           head = ptr;
+           ptr -> next = head;
+           ptr -> prev = head;
+       }
+       else
+       {
+          temp = head;
+          while(temp->next !=head)
+          {
+              temp = temp->next;
+          }
+          temp->next = ptr;
+          ptr ->prev=temp;
+          head -> prev = ptr;
+          ptr -> next = head;
+        }
+   }
+     printf("\nnode inserted\n");
+}
+void insert_at_pos()
+{
+   struct node *ptr,*temp;
+   int item,loc,i;
+   ptr = (struct node *)malloc(sizeof(struct node));
+   if(ptr == NULL)
+   {
+       printf("\n OVERFLOW");
+   }
+   else
+   {
+       temp=head;
+       printf("Enter the index where to insert");
+       scanf("%d",&loc);
+       for(i=0;i<loc;i++)
+       {
+           temp = temp->next;
+           if(temp == NULL)
+           {
+               printf("\n invalid index");
+               return;
+           }
+       }
+       printf("Enter data :: ");
+       scanf("%d",&item);
+       ptr->data = item;
+       ptr->next = temp->next;
+       ptr -> prev = temp;
+       temp->next = ptr;
+       temp->next->prev=ptr;
+       printf("\nnode inserted\n");
+   }
+}
+
+void deletion_beg()
+{
+    struct node *temp;
+    if(head == NULL)
+    {
+        printf("\n UNDERFLOW");
+    }
+    else if(head->next == head)
+    {
+        head = NULL;
+        free(head);
+        printf("\nnode deleted\n");
+    }
+    else
+    {
+        temp = head;
+        while(temp -> next != head)
+        {
+            temp = temp -> next;
+        }
+        temp -> next = head -> next;
+        head -> next -> prev = temp;
+        free(head);
+        head = temp -> next;
+    }
+
+}
+void deletion_last()
+{
+    struct node *ptr;
+    if(head == NULL)
+    {
+        printf("\n UNDERFLOW");
+    }
+    else if(head->next == head)
+    {
+        head = NULL;
+        free(head);
+        printf("\nnode deleted\n");
+    }
+    else
+    {
+        ptr = head;
+        if(ptr->next != head)
+        {
+            ptr = ptr -> next;
+        }
+        ptr -> prev -> next = head;
+        head -> prev = ptr -> prev;
+        free(ptr);
+        printf("\nnode deleted\n");
+    }
+}
+
+void delete_at_pos()
+{
+    struct node *ptr, *temp;
+    int val;
+    printf("\n Enter the data after which the node is to be deleted : ");
+    scanf("%d", &val);
+    ptr = head;
+    while(ptr -> data != val)
+    ptr = ptr -> next;
+    if(ptr -> next == NULL)
+    {
+        printf("\ndeletion not possible \n");
+    }
+    else if(ptr -> next -> next == NULL)
+    {
+        ptr ->next = NULL;
+        printf("not deleted");
+    }
+    else
+    {
+        temp = ptr -> next;
+        ptr -> next = temp -> next;
+        temp -> next -> prev = ptr;
+        free(temp);
+        printf("\nnode deleted\n");
+    }
+}
+void display()
+{
+    struct node *ptr;
+    ptr=head;
+    if(head == NULL)
+    {
+    }
+    else
+    {
+        printf("\n THE DOUBLY LINKED LIST IS :: \n");
+
+        while(ptr -> next != head)
+        {
+
+            printf("%d\n", ptr -> data);
+            ptr = ptr -> next;
+        }
+        printf("%d\n", ptr -> data);
+    }
+}   
